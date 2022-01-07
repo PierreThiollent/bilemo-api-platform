@@ -5,17 +5,20 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Validator;
 
 #[ApiResource(
-    collectionOperations: ['get'],
+    collectionOperations: ['get', 'post'],
     itemOperations: ['get', 'delete'],
     denormalizationContext: ['groups' => ['write']],
     normalizationContext: ['groups' => ['read']],
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity('email', message: 'Un utilisateur avec cet email existe déjà')]
 class User implements PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -26,18 +29,41 @@ class User implements PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     #[Groups(['read', 'write'])]
+    #[Validator\NotBlank(message: 'Le champ email ne doit pas être vide.')]
+    #[Validator\Email(message: 'Le champ email doit être un email valide.')]
     private string $email;
 
     #[ORM\Column(type: 'string')]
     #[Groups(['read', 'write'])]
+    #[Validator\NotBlank(message: 'Le mot de passe ne doit pas être vide.')]
+    #[Validator\Length(
+        min: 8,
+        max: 80,
+        minMessage: 'Le mot de passe doit faire au moins {{ limit }} caractères.',
+        maxMessage: 'Le mot de passe ne doit pas faire plus de {{ limit }} caractères.'
+    )]
     private string $password;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['read', 'write'])]
+    #[Validator\NotBlank(message: 'Le nom ne doit pas être vide.')]
+    #[Validator\Length(
+        min: 2,
+        max: 255,
+        minMessage: 'Le nom doit faire au moins {{ limit }} caractères.',
+        maxMessage: 'Le nom ne doit pas faire plus de {{ limit }} caractères.'
+    )]
     private string $firstname;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['read', 'write'])]
+    #[Validator\NotBlank(message: 'Le prénom ne doit pas être vide.')]
+    #[Validator\Length(
+        min: 2,
+        max: 255,
+        minMessage: 'Le prénom doit faire au moins {{ limit }} caractères.',
+        maxMessage: 'Le prénom ne doit pas faire plus de {{ limit }} caractères.'
+    )]
     private string $lastname;
 
     #[ORM\ManyToOne(targetEntity: Client::class)]
