@@ -14,8 +14,10 @@ use Symfony\Component\Security\Core\Security;
 
 class PostUsersSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private Security $security, public UserPasswordHasherInterface $passwordHasher)
-    {
+    public function __construct(
+        private Security $security,
+        public UserPasswordHasherInterface $passwordHasher
+    ) {
     }
 
     #[ArrayShape([KernelEvents::VIEW => 'array[]'])]
