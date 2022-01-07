@@ -21,5 +21,10 @@ services:
             - '../src/Kernel.php'
             - '../src/Tests/'
 
+    'App\Doctrine\CurrentClientUserExtension':
+        tags:
+            - { name: api_platform.doctrine.orm.query_extension.collection }
+            - { name: api_platform.doctrine.orm.query_extension.item }
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
