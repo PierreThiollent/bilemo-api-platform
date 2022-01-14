@@ -34,12 +34,10 @@ class User implements PasswordAuthenticatedUserInterface
     private string $email;
 
     #[ORM\Column(type: 'string')]
-    #[Groups(['read', 'write'])]
+    #[Groups(['write'])]
     #[Validator\NotBlank(message: 'Le mot de passe ne doit pas être vide.')]
     #[Validator\Length(
-        min: 8,
-        max: 80,
-        minMessage: 'Le mot de passe doit faire au moins {{ limit }} caractères.',
+        max: 255,
         maxMessage: 'Le mot de passe ne doit pas faire plus de {{ limit }} caractères.'
     )]
     private string $password;
