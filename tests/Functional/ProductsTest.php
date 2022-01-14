@@ -25,7 +25,7 @@ class ProductsTest extends AbstractTest
         $products = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertIsArray($products['hydra:member']);
-        self::assertCount(15, $products['hydra:member']);
+        self::assertCount(10, $products['hydra:member']);
 
         foreach ($products['hydra:member'] as $product) {
             self::assertArrayHasKey('id', $product);
