@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Client;
 use App\Entity\Product;
 use App\Entity\User;
+use App\Repository\ClientRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -12,7 +13,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class AppFixtures extends Fixture
 {
     public function __construct(
-        private UserPasswordHasherInterface $passwordHasher
+        private UserPasswordHasherInterface $passwordHasher,
+        private ClientRepository $clientRepository
     ) {
     }
 
@@ -21,7 +23,7 @@ class AppFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
-        for ($i = 0; $i < 15; ++$i) {
+        for ($i = 1; $i <= 15; ++$i) {
             $product = new Product();
             $product->setName('Product ' . $i);
             $product->setPrice(random_int(10, 100));
@@ -34,7 +36,7 @@ class AppFixtures extends Fixture
             $manager->flush();
         }
 
-        for ($i = 0; $i < 3; ++$i) {
+        for ($i = 1; $i <= 3; ++$i) {
             $client = new Client();
             $client->setName('Client ' . $i);
             $client->setEmail('client' . $i . '@test.fr');
@@ -46,18 +48,18 @@ class AppFixtures extends Fixture
 
             $manager->persist($client);
             $manager->flush();
+        }
 
-            for ($j = 0; $j < 5; ++$j) {
-                $user = new User();
-                $user->setEmail('user' . $i . '@test.fr');
-                $user->setPassword($this->passwordHasher->hashPassword($user, 'test'));
-                $user->setFirstname('User ' . $i);
-                $user->setLastname('Test');
-                $user->setClient($client);
+        for ($j = 1; $j <= 3; ++$j) {
+            $user = new User();
+            $user->setEmail('user' . $j . '@test.fr');
+            $user->setPassword($this->passwordHasher->hashPassword($user, 'test'));
+            $user->setFirstname('User ' . $j);
+            $user->setLastname('Test');
+            $user->setClient($this->clientRepository->findOneBy(['name' => 'Client ' . $j]));
 
-                $manager->persist($user);
-                $manager->flush();
-            }
+            $manager->persist($user);
+            $manager->flush();
         }
     }
 }
