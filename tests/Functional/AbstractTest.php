@@ -24,7 +24,7 @@ abstract class AbstractTest extends WebTestCase
             'POST',
             '/api/login',
             server: ['CONTENT_TYPE' => 'application/json'],
-            content: '{"email":"pierre.thiollent76@gmail.com","password":"test"}'
+            content: '{"email":"client1@test.fr","password":"test"}'
         );
 
         $data = json_decode(

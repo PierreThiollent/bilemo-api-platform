@@ -69,7 +69,7 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "test": "php ./vendor/bin/phpunit --testdox"
+        "test": "APP_ENV=test php bin/console doctrine:fixtures:load --no-interaction && php ./vendor/bin/phpunit --testdox"
     },
     "conflict": {
         "symfony/symfony": "*"

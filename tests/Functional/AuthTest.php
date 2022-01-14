@@ -36,7 +36,7 @@ class AuthTest extends AbstractTest
             'POST',
             '/api/login',
             server: ['CONTENT_TYPE' => 'application/json'],
-            content: '{"email":"pierre.thiollent76@gmail.com","password":"test"}'
+            content: '{"email":"client1@test.fr","password":"test"}'
         );
 
         self::assertResponseStatusCodeSame(200);
